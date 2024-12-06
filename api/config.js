@@ -1,3 +1,4 @@
+console.log(process.env);
 module.exports = {
   appName: 'gh',
   port: 5000,
