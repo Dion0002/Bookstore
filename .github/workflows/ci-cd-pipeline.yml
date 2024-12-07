@@ -54,7 +54,7 @@ jobs:
 
       - id: terraform_apply
         name: Terraform Apply (with auto-approve)
-        run: terraform apply -auto-approve -var-file="terraform.tfvars"
+        run: terraform apply -auto-approve 
 
         working-directory: ./terraform  
 
