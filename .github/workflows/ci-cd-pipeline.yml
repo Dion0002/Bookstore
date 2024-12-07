@@ -56,7 +56,19 @@ jobs:
         name: Terraform Apply (with auto-approve)
         run: terraform apply -auto-approve 
 
-        working-directory: ./terraform  
+        working-directory: ./terraform 
+        
+      - name: Capture Terraform Outputs (Debug)
+        run: |
+          echo "DATABASE_HOST=$(terraform output DATABASE_HOST)"
+          echo "DATABASE_USER=$(terraform output DATABASE_USER)"
+          echo "DATABASE_PASSWORD=$(terraform output DATABASE_PASSWORD)"
+          echo "DATABASE_NAME=$(terraform output DATABASE_NAME)"
+          echo "ECR_REPO_NAME=$(terraform output ECR_REPO_NAME)"
+          echo "ECR_URL=$(terraform output ECR_URL)"
+          echo "FULL_ECR=$(terraform output FULL_ECR)"
+          echo "EKS_CLUSTER_NAME=$(terraform output EKS_CLUSTER_NAME)"
+          echo "S3_BUCKET_NAME=$(terraform output S3_BUCKET_NAME)"
 
       - id: capture_outputs
         name: Capture Terraform Outputs
