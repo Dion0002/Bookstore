@@ -28,7 +28,7 @@ jobs:
         name: Checkout Code
         uses: actions/checkout@v3
         with:
-          path: terraform
+          path: terraform  # Ensure 'terraform' directory contains necessary files
 
       - id: configure_aws_credentials
         name: Configure AWS Credentials
@@ -47,35 +47,35 @@ jobs:
       - id: terraform_init
         name: Terraform Init
         run: terraform init
-        working-directory: terraform
+        working-directory: ./terraform  # Ensure correct working directory for Terraform
 
       - id: terraform_fmt
         name: Terraform Fmt
         run: terraform fmt -recursive
-        working-directory: terraform
+        working-directory: ./terraform
 
       - id: terraform_apply
         name: Terraform Apply (with auto-approve)
         run: terraform apply -auto-approve
-        working-directory: terraform
+        working-directory: ./terraform  # Ensure Terraform working directory is set correctly
 
       - id: capture_outputs
         name: Capture Terraform Outputs
         run: |
-          echo "DB_ENDPOINT=$(terraform output  db_instance_endpoint)" >> "$GITHUB_OUTPUT"
-          echo "DB_USER=$(terraform output  db_username)" >> "$GITHUB_OUTPUT"
-          echo "DB_PASSWORD=$(terraform output  db_password)" >> "$GITHUB_OUTPUT"
-          echo "DB_NAME=$(terraform output  db_name)" >> "$GITHUB_OUTPUT"
-          echo "ECR_REPO_NAME=$(terraform output  ecr_repository_name)" >> "$GITHUB_OUTPUT"
-          echo "ECR_URL=$(terraform output  ecr_repository_url)" >> "$GITHUB_OUTPUT"
-          echo "FULL_ECR=$(terraform output  full_ecr_url)" >> "$GITHUB_OUTPUT"
+          echo "DB_ENDPOINT=$(terraform output db_instance_endpoint)" >> "$GITHUB_OUTPUT"
+          echo "DB_USER=$(terraform output db_username)" >> "$GITHUB_OUTPUT"
+          echo "DB_PASSWORD=$(terraform output db_password)" >> "$GITHUB_OUTPUT"
+          echo "DB_NAME=$(terraform output db_name)" >> "$GITHUB_OUTPUT"
+          echo "ECR_REPO_NAME=$(terraform output ecr_repository_name)" >> "$GITHUB_OUTPUT"
+          echo "ECR_URL=$(terraform output ecr_repository_url)" >> "$GITHUB_OUTPUT"
+          echo "FULL_ECR=$(terraform output full_ecr_url)" >> "$GITHUB_OUTPUT"
           echo "EKS_CLUSTER_NAME=$(terraform output eks_cluster_name)" >> "$GITHUB_OUTPUT"
-          echo "S3_BUCKET_NAME=$(terraform output  s3_bucket_name)" >> "$GITHUB_OUTPUT"
-        working-directory: terraform
+          echo "S3_BUCKET_NAME=$(terraform output s3_bucket_name)" >> "$GITHUB_OUTPUT"
+        working-directory: ./terraform
 
   api:
     runs-on: ubuntu-latest
-    needs: setup  
+    needs: setup
 
     outputs:
       EXTERNAL_IP: ${{ steps.get_external_ip.outputs.external_ip }}  # Capture External IP
@@ -83,7 +83,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
 
       - name: Login to Amazon ECR
         id: login-ecr
@@ -123,12 +122,11 @@ jobs:
 
   frontend:
     runs-on: ubuntu-latest
-    needs: api 
+    needs: api
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
 
       - name: Build React App
         run: |
@@ -137,4 +135,4 @@ jobs:
 
       - name: Sync to S3
         run: |
-          aws s3 sync ./web_client/build s3://${{ needs.setup.outputs.S3_BUCKET_NAME }} --delete  # Use the S3 bucket name from setup job
+          aws s3 sync ./web_client/build s3://${{ needs.setup.outputs.S3_BUCKET_NAME }} --delete  # Sync build to S3 bucket from setup job
