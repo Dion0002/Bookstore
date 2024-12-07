@@ -86,6 +86,12 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
+        with:
+          registry-type: private
+          mask-password: true
+          skip-logout: false
+          region: eu-west-1 
+
 
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
