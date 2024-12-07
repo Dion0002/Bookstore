@@ -13,10 +13,10 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      DATABASE_HOST: ${{ steps.capture_outputs.outputs.DB_ENDPOINT }}
-      DATABASE_USER: ${{ steps.capture_outputs.outputs.DB_USER }}
-      DATABASE_PASSWORD: ${{ steps.capture_outputs.outputs.DB_PASSWORD }}
-      DATABASE_NAME: ${{ steps.capture_outputs.outputs.DB_NAME }}
+      DATABASE_HOST: ${{ steps.capture_outputs.outputs.DATABASE_HOST }}
+      DATABASE_USER: ${{ steps.capture_outputs.outputs.DATABASE_USER }}
+      DATABASE_PASSWORD: ${{ steps.capture_outputs.outputs.DATABASE_PASSWORD }}
+      DATABASE_NAME: ${{ steps.capture_outputs.outputs.DATABASE_NAME }}
       ECR_REPO_NAME: ${{ steps.capture_outputs.outputs.ECR_REPO_NAME }}
       ECR_URL: ${{ steps.capture_outputs.outputs.ECR_URL }}
       FULL_ECR: ${{ steps.capture_outputs.outputs.FULL_ECR }}
