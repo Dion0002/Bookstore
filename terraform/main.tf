@@ -35,9 +35,10 @@ module "eks" {
   CLUSTER_ARN                 = module.IAM_SECURITY.cluster_role_arn
   NODE_ROLE_ARN               = module.IAM_SECURITY.node_role_arn
   VPC_ID                      = module.Network.vpc_id
-  COMMON_SECURITY_GROUP_ID    = module.IAM_SECURITY.common_security_group_id
   SUBNET_IDS                  = module.Network.PUBLIC_SUBNET_IDS
   DEPENDENT_ROLES_ATTACHMENTS = module.IAM_SECURITY.dependent_roles_attachments
   REPOSITORY_NAME             = "${var.APP_NAME}-ecr-repo"
-
+  WORKER_GROUP_POLICY = module.IAM_SECURITY.node_AmazonEKSWorkerNodePolicy
+  CONTAINER_GROUP_POLICY = module.IAM_SECURITY.node_AmazonEC2ContainerRegistryReadOnly
+  CNI_GROUP_POLICY = module.IAM_SECURITY.node_AmazonEKS_CNI_Policy
 }

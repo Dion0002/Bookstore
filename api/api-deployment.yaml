@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: api-deployment
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: api
@@ -14,17 +14,32 @@ spec:
     spec:
       containers:
         - name: api
-          image: 820242910172.dkr.ecr.eu-west-1.amazonaws.com/final-project-ecr-repo:latest
+          image: ${FULL_ECR}
           ports:
             - containerPort: 5000
           env:
             - name: DATABASE_USER
-              value: "postgres"
+              value: ${DATABASE_USER}
             - name: DATABASE_PASSWORD
-              value: "postgres"
+              value: ${DATABASE_PASSWORD}
             - name: DATABASE_NAME
-              value: "mydatabase"
+              value: ${DATABASE_NAME}
             - name: DATABASE_HOST
-              value: "final-project-db-instance.cp4uqqyiq3l6.eu-west-1.rds.amazonaws.com"
+              value: ${DATABASE_HOST}
             - name: DATABASE_PORT
               value: "5432"
+            - name: NODE_ENV
+              value: "production"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-service
+spec:
+  selector:
+    app: api
+  ports:
+    - protocol: TCP
+      port: 80  
+      targetPort: 5000  
+  type: LoadBalancer  

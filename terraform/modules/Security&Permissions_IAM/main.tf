@@ -8,6 +8,7 @@ resource "aws_iam_role" "cluster" {
           "sts:AssumeRole",
           "sts:TagSession"
         ]
+        Sid = "clusterSID"
         Effect = "Allow"
         Principal = {
           Service = "eks.amazonaws.com"
@@ -28,6 +29,7 @@ resource "aws_iam_role" "node" {
     Version = "2012-10-17"
     Statement = [
       {
+        Sid = "NodeGroupSID"
         Action = ["sts:AssumeRole"]
         Effect = "Allow"
         Principal = {
@@ -48,13 +50,13 @@ resource "aws_iam_role_policy_attachment" "node_AmazonEC2ContainerRegistryReadOn
   role       = aws_iam_role.node.name
 }
 
-# Optional: Attach the VPC CNI policy for networking
+
 resource "aws_iam_role_policy_attachment" "node_AmazonEKS_CNI_Policy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
   role       = aws_iam_role.node.name
 }
 
-# Security Group with enhanced ingress for Kubernetes API and Kubelet communication
+
 resource "aws_security_group" "common_sg" {
   name   = "Allow access"
   vpc_id = var.VPC_ID

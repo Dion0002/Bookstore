@@ -8,9 +8,7 @@ variable "CLUSTER_ARN" {
 variable "VPC_ID" {
   type = string
 }
-variable "COMMON_SECURITY_GROUP_ID" {
-  type = string
-}
+
 variable "SUBNET_IDS" {
   type = list(string)
 
@@ -57,4 +55,16 @@ variable "REPOSITORY_NAME" {
 variable "ENABLE_SCAN_ON_PUSH" {
   type    = bool
   default = true
+}
+
+variable "WORKER_GROUP_POLICY" {
+
+}
+
+variable "CNI_GROUP_POLICY" {
+  
+}
+
+variable "CONTAINER_GROUP_POLICY" {
+  
 }

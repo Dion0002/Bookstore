@@ -5,8 +5,6 @@ resource "aws_eks_cluster" "eks" {
 
 
   vpc_config {
-    endpoint_private_access = true
-    endpoint_public_access  = true
     subnet_ids              = var.SUBNET_IDS
 
   }
@@ -20,6 +18,8 @@ resource "aws_eks_cluster" "eks" {
   }
 
 }
+
+
 
 
 resource "aws_eks_node_group" "node_group" {
@@ -43,6 +43,7 @@ resource "aws_eks_node_group" "node_group" {
     Name        = "${var.CLUSTER_NAME}-nodes"
     Environment = var.ENVIRONMENT
   }
+  depends_on = [ var.WORKER_GROUP_POLICY , var.CONTAINER_GROUP_POLICY , var.CNI_GROUP_POLICY]
 }
 
 
@@ -53,4 +54,8 @@ resource "aws_ecr_repository" "ecr_repository" {
   image_scanning_configuration {
     scan_on_push = var.ENABLE_SCAN_ON_PUSH
   }
+}
+data "aws_ecr_image" "image_tag" {
+  repository_name = var.REPOSITORY_NAME
+  most_recent     = true
 }
