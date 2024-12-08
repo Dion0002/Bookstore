@@ -155,5 +155,6 @@ jobs:
 
       - name: Sync to S3
         run: |
+          echo ${{ needs.setup.outputs.S3_BUCKET_NAME }}
           aws s3 sync ./build s3://${{ needs.setup.outputs.S3_BUCKET_NAME }} --delete  # Use the S3 bucket name from setup job
       
