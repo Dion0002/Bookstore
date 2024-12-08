@@ -112,10 +112,9 @@ jobs:
           docker push "${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ env.IMAGE_TAG }}"
           echo "IMAGE_URL=${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ env.IMAGE_TAG }}" >> $GITHUB_OUTPUT
           
-      - name: Setup Kubeconfig for EKS
-        uses: tale/kubectl-action@v1
+      - uses: tale/kubectl-action@v1
         with:
-            base64-kube-config: ${{ secrets.KUBE_CONFIG }}
+          base64-kube-config: ${{ secrets.KUBE_CONFIG }}
 
       - name: Get External IP of API Service
         id: get_external_ip
