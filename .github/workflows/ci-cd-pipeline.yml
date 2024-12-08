@@ -67,7 +67,8 @@ jobs:
           echo "DATABASE_PASSWORD=$(terraform output -raw DATABASE_PASSWORD)" >> $GITHUB_OUTPUT
           echo "DATABASE_NAME=$(terraform output -raw DATABASE_NAME)" >> $GITHUB_OUTPUT
           echo "ECR_REPO_NAME=$(terraform output -raw ECR_REPO_NAME)" >> $GITHUB_OUTPUT
-          echo "ECR_URL=$(terraform output -raw ECR_URL)" >> $GITHUB_OUTPUT
+          ECR_URL=$(terraform output -raw ECR_URL)
+          echo "ECR_URL=${ECR_URL}" >> $GITHUB_OUTPUT
           echo "FULL_ECR=$(terraform output -raw FULL_ECR)" >> $GITHUB_OUTPUT
           echo "EKS_CLUSTER_NAME=$(terraform output -raw EKS_CLUSTER_NAME )" >> $GITHUB_OUTPUT
           echo "S3_BUCKET_NAME=$(terraform output -raw S3_BUCKET_NAME)" >> $GITHUB_OUTPUT
