@@ -71,7 +71,7 @@ jobs:
           echo "ECR_URL=${ECR_URL}" >> $GITHUB_OUTPUT
           echo "FULL_ECR=$(terraform output -raw FULL_ECR)" >> $GITHUB_OUTPUT
           echo "EKS_CLUSTER_NAME=$(terraform output -raw EKS_CLUSTER_NAME )" >> $GITHUB_OUTPUT
-          S3_BUCKET_NAME=$(terraform output -raw S3_BUCKET_NAME)
+          S3_BUCKET_NAME=$(terraform output -raw  S3_BUCKET_NAME)
           echo "S3_BUCKET_NAME=${S3_BUCKET_NAME}" >> $GITHUB_OUTPUT
         working-directory: ./terraform  
 
@@ -156,5 +156,5 @@ jobs:
       - name: Sync to S3
         run: |
           echo ${{ needs.setup.outputs.S3_BUCKET_NAME }}
-          aws s3 sync ./build s3://${{ needs.setup.outputs.S3_BUCKET_NAME }} --delete  # Use the S3 bucket name from setup job
+          aws s3 sync ./build "s3://${{ needs.setup.outputs.S3_BUCKET_NAME }}" --delete  # Use the S3 bucket name from setup job
       
