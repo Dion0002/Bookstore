@@ -137,6 +137,10 @@ jobs:
   frontend:
     runs-on: ubuntu-latest
     needs: api 
+    defaults:
+      run:
+        shell: bash
+        working-directory: web_client
 
     steps:
       - name: Checkout code
@@ -152,3 +156,4 @@ jobs:
       - name: Sync to S3
         run: |
           aws s3 sync ./build s3://${{ needs.setup.outputs.S3_BUCKET_NAME }} --delete  # Use the S3 bucket name from setup job
+      
