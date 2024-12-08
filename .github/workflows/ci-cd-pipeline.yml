@@ -147,6 +147,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - id: configure_aws_credentials
+        name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-1  
+
       - name: Build React App
         run: |
           export REACT_APP_SERVER_URL="${{ needs.api.outputs.EXTERNAL_IP }}"  # Use the external IP from the api job
@@ -156,5 +164,5 @@ jobs:
       - name: Sync to S3
         run: |
           echo ${{ needs.setup.outputs.S3_BUCKET_NAME }}
-          aws s3 sync ./build "s3://${{ needs.setup.outputs.S3_BUCKET_NAME }}" --delete  # Use the S3 bucket name from setup job
+          aws s3 sync ./build s3://${{ needs.setup.outputs.S3_BUCKET_NAME }} --delete  # Use the S3 bucket name from setup job
       
