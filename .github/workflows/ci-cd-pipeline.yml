@@ -148,7 +148,6 @@ jobs:
 
       - name: Build React App
         run: |
-          cd ./web_client
           export REACT_APP_SERVER_URL="${{ needs.api.outputs.EXTERNAL_IP }}"  # Use the external IP from the api job
           npm install
           npm run build
