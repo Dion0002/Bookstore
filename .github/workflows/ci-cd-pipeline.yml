@@ -113,10 +113,9 @@ jobs:
           echo "IMAGE_URL=${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ env.IMAGE_TAG }}" >> $GITHUB_OUTPUT
           
       - name: Setup Kubeconfig for EKS
-        uses: actions-hub/kubectl@master
-        env:
-          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}  
-          KUBE_CONTEXT: ${{ secrets.KUBE_CONTEXT }}
+        uses: tale/kubectl-action@v1
+        with:
+            base64-kube-config: ${{ secrets.KUBE_CONFIG }}
 
       - name: Get External IP of API Service
         id: get_external_ip
