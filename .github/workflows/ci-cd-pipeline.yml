@@ -161,6 +161,9 @@ jobs:
           npm install
           npm run build
 
+      - name: Debug output
+        run: echo '${{ toJSON(needs.setup.outputs) }}'    
+
       - name: Sync to S3
         run: |
           echo ${{ needs.setup.outputs.S3_BUCKET_NAME }}
