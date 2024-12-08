@@ -97,8 +97,8 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
-        with:
-          aws-region: eu-west-1
+        
+          
 
 
       - name: Build, tag, and push image to Amazon ECR
@@ -112,21 +112,20 @@ jobs:
           echo ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           docker build -t "${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ env.IMAGE_TAG }}" ./api
           docker push "${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ env.IMAGE_TAG }}"
-          echo "IMAGE_URL=${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ env.IMAGE_TAG }}" >> $GITHUB_OUTPUT
+          echo IMAGE_URL=${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ env.IMAGE_TAG }}" >> $GITHUB_OUTPUT
           
       - uses: tale/kubectl-action@v1
         with:
           base64-kube-config: ${{ secrets.KUBE_CONFIG }}
 
    
-      - name: Replace environment variables in deployment.yaml using envsubst
+      - name: Apply api-deployment yaml file
         run: |
           export DATABASE_HOST="${{ needs.setup.outputs.DATABASE_HOST }}"
           export DATABASE_USER="${{ needs.setup.outputs.DATABASE_USER }}"
           export DATABASE_PASSWORD="${{ needs.setup.outputs.DATABASE_PASSWORD }}"
           export DATABASE_NAME="${{ needs.setup.outputs.DATABASE_NAME }}"
-          export ECR_URL="${{ needs.setup.outputs.ECR_URL }}"
-          export FULL_ECR="${{ needs.setup.outputs.FULL_ECR }}"
+          export IMAGE_URL="${{ steps.build-image.outputs.IMAGE_URL }}"
           envsubst < ./api/api-deployment.yaml | kubectl apply -f -
 
       - name: Get External IP of API Service
