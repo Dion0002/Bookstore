@@ -8,6 +8,7 @@ output "ECR_URL" {
 
 output "FULL_ECR" {
   value = module.eks.ECR_FULL_IMAGE_URI
+  
 }
 
 output "DATABASE_USER" {
