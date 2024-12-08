@@ -116,12 +116,7 @@ jobs:
         with:
           base64-kube-config: ${{ secrets.KUBE_CONFIG }}
 
-      - name: Get External IP of API Service
-        id: get_external_ip
-        run: |
-          EXTERNAL_IP=$(kubectl get svc api-service -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
-          echo "external_ip=$EXTERNAL_IP" >> $GITHUB_OUTPUT
-
+   
       - name: Replace environment variables in deployment.yaml using envsubst
         run: |
           export DATABASE_HOST="${{ needs.setup.outputs.DATABASE_HOST }}"
@@ -130,8 +125,13 @@ jobs:
           export DATABASE_NAME="${{ needs.setup.outputs.DATABASE_NAME }}"
           export ECR_URL="${{ needs.setup.outputs.ECR_URL }}"
           export FULL_ECR="${{ needs.setup.outputs.FULL_ECR }}"
-          export EXTERNAL_IP="${{ steps.get_external_ip.outputs.external_ip }}"  # Pass external IP here
           envsubst < ./api/api-deployment.yaml | kubectl apply -f -
+
+      - name: Get External IP of API Service
+        id: get_external_ip
+        run: |
+          EXTERNAL_IP=$(kubectl get svc api-service -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+          echo "external_ip=$EXTERNAL_IP" >> $GITHUB_OUTPUT
 
   frontend:
     runs-on: ubuntu-latest
